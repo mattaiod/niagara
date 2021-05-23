@@ -3,7 +3,7 @@
     <v-app>
       <v-stepper alt-labels>
         <v-stepper-header>
-          <v-stepper-step :complete="stepCompleted[0]" step="1">
+          <v-stepper-step :complete="stepCompleted[0]" :step="1">
             Etape 1
           </v-stepper-step>
 
@@ -22,7 +22,8 @@
     </v-stepper>
     <v-btn color="success" @click="onDashboard">Tableau de bord</v-btn>
 
-    <Step1 v-if="actualStep == 1"></Step1>
+    <Step1 v-if="actualStep == 1" @setValid1="setValid1($event)"
+    :inputFormat= "step1.inputFormat"></Step1>
     <Step2 v-else-if="actualStep == 2"></Step2>
     <Step3 v-else-if="actualStep == 3"></Step3>
 
@@ -37,7 +38,7 @@
       <v-btn color="success" @click="onPreviousStep">Précédent</v-btn>
     </div>
     <div v-if="actualStep!=3">
-      <v-btn color="success" @click="onNextStep">Suivant</v-btn>
+      <v-btn color="success" @click="onNextStep" :disabled="isButtonNextStepDisabled">Suivant</v-btn>
     </div>
     <div v-else>
       <v-btn color="success" @click="onFinish">Terminer</v-btn>
@@ -61,17 +62,27 @@ export default {
   data() {
     return {
       actualStep: 1,
-      isStepValidable: false,
+      isButtonNextStepDisabled: true,
       stepCompleted: [false, false, false],
-      totalStep: 3
+      totalStep: 3,
+      step1: {
+        inputFormat: 'API'
+      }
     }
+  },
+  props: {
+
   },
   computed: {
   },
   methods: {
+    setValid1(inputFormat){
+      this.step1.inputFormat = inputFormat
+      this.isButtonNextStepDisabled = false
+    },
     onNextStep() {
-      this.actualStep++
       this.stepCompleted[this.actualStep - 1] = true
+      this.actualStep++
     },
     onPreviousStep() {
       this.actualStep--
