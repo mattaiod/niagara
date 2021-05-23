@@ -26,8 +26,12 @@
     },
     methods: {
       setValidAndPushData() {
-        if(this.inputFormats.includes(this.inputFormatSelected))
-          this.$emit('setValid1', this.inputFormatSelected)
+        this.$emit('setDataStep1', this.inputFormatSelected)
+        if(this.inputFormats.includes(this.inputFormatSelected)){
+          this.$emit('setValidStep1', true)
+        } else {
+          this.$emit('setValidStep1', false)
+        }
       }
     },
     mounted() {

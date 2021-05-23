@@ -22,9 +22,11 @@
     </v-stepper>
     <v-btn color="success" @click="onDashboard">Tableau de bord</v-btn>
 
-    <Step1 v-if="actualStep == 1" @setValid1="setValid1($event)"
+    <Step1 v-if="actualStep == 1" @setValidStep1="setValidStep1($event)" @setDataStep1="setDataStep1($event)"
     :inputFormat= "step1.inputFormat"></Step1>
-    <Step2 v-else-if="actualStep == 2"></Step2>
+    <Step2 v-else-if="actualStep == 2" @setValidStep2="setValidStep2($event)" @setDataStep2="setDataStep2($event)"
+      :pNameCard= "step2.nameCard"
+      :pTeamLabel= "step2.teamLabel"></Step2>
     <Step3 v-else-if="actualStep == 3"></Step3>
 
 
@@ -66,8 +68,13 @@ export default {
       stepCompleted: [false, false, false],
       totalStep: 3,
       step1: {
-        inputFormat: 'API'
-      }
+        inputFormat: ""
+      },
+      step2: {
+        file: null,
+        nameCard: "",
+        teamLabel: ""
+      },
     }
   },
   props: {
@@ -76,11 +83,24 @@ export default {
   computed: {
   },
   methods: {
-    setValid1(inputFormat){
+    setDataStep1(inputFormat){
       this.step1.inputFormat = inputFormat
-      this.isButtonNextStepDisabled = false
+    },
+    setValidStep1(isValid) {
+      console.log(isValid)
+      this.isButtonNextStepDisabled = !isValid
+    },
+    setDataStep2(content){
+      this.step2.file = content.file,
+      this.step2.nameCard = content.nameCard,
+      this.step2.teamLabel = content.teamLabel
+    },
+    setValidStep2(isValid) {
+      console.log(isValid)
+      this.isButtonNextStepDisabled = !isValid
     },
     onNextStep() {
+      this.isButtonNextStepDisabled= true
       this.stepCompleted[this.actualStep - 1] = true
       this.actualStep++
     },
