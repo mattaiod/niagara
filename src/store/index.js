@@ -25,10 +25,20 @@ export default new Vuex.Store({
         teamLabel: 'production',
         triggerType: 'Manuel',
         dateUpdateExpected: '2020-05-07',
+      },
+      {
+        inputFormat: 'Fichier',
+        file: 'txt.txt',
+        nameCard: 'Carte de production des poires',
+        teamLabel: 'production',
+        triggerType: 'Manuel',
+        dateUpdateExpected: '2020-05-07',
       }
-    ]
+    ],
+    teamLabels: ['logistique', 'production', 'qualité', 'maintenance'],
   },
   getters: {
+    teamLabels: (state) => state.teamLabels,
     sources: (state) => state.sources,
   },
   mutations: {
