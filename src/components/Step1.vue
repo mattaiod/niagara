@@ -28,9 +28,9 @@
       setValidAndPushData() {
         this.$emit('setDataStep1', this.inputFormatSelected)
         if(this.inputFormats.includes(this.inputFormatSelected)){
-          this.$emit('setValidStep1', true)
+          this.$emit('setValidStep', true)
         } else {
-          this.$emit('setValidStep1', false)
+          this.$emit('setValidStep', false)
         }
       }
     },

@@ -22,12 +22,15 @@
     </v-stepper>
     <v-btn color="success" @click="onDashboard">Tableau de bord</v-btn>
 
-    <Step1 v-if="actualStep == 1" @setValidStep1="setValidStep1($event)" @setDataStep1="setDataStep1($event)"
+    <Step1 v-if="actualStep == 1" @setValidStep="setValidStep($event)" @setDataStep1="setDataStep1($event)"
     :inputFormat= "step1.inputFormat"></Step1>
-    <Step2 v-else-if="actualStep == 2" @setValidStep2="setValidStep2($event)" @setDataStep2="setDataStep2($event)"
+    <Step2 v-else-if="actualStep == 2" @setValidStep="setValidStep($event)" @setDataStep2="setDataStep2($event)"
       :pNameCard= "step2.nameCard"
       :pTeamLabel= "step2.teamLabel"></Step2>
-    <Step3 v-else-if="actualStep == 3"></Step3>
+    <Step3 v-else-if="actualStep == 3" @setValidStep="setValidStep($event)" @setDataStep3="setDataStep3($event)"
+      :pTrigger= "step3.trigger"
+      :pDate= "step3.date"
+    ></Step3>
 
 
 
@@ -43,7 +46,7 @@
       <v-btn color="success" @click="onNextStep" :disabled="isButtonNextStepDisabled">Suivant</v-btn>
     </div>
     <div v-else>
-      <v-btn color="success" @click="onFinish">Terminer</v-btn>
+      <v-btn color="success" @click="onFinish" :disabled="isButtonNextStepDisabled">Terminer</v-btn>
     </div>
     
     
@@ -53,6 +56,8 @@
 </template>
 
 <script>
+import store from '@/store'
+import router from '@/router'
 import Step1 from "@/components/Step1.vue"
 import Step2 from "@/components/Step2.vue"
 import Step3 from "@/components/Step3.vue"
@@ -75,6 +80,10 @@ export default {
         nameCard: "",
         teamLabel: ""
       },
+      step3: {
+        trigger: "",
+        date: ""
+      },
     }
   },
   props: {
@@ -83,21 +92,20 @@ export default {
   computed: {
   },
   methods: {
+    setValidStep(isValid) {
+      this.isButtonNextStepDisabled = !isValid
+    },
     setDataStep1(inputFormat){
       this.step1.inputFormat = inputFormat
-    },
-    setValidStep1(isValid) {
-      console.log(isValid)
-      this.isButtonNextStepDisabled = !isValid
     },
     setDataStep2(content){
       this.step2.file = content.file,
       this.step2.nameCard = content.nameCard,
       this.step2.teamLabel = content.teamLabel
     },
-    setValidStep2(isValid) {
-      console.log(isValid)
-      this.isButtonNextStepDisabled = !isValid
+    setDataStep3(content){
+      this.step3.trigger = content.trigger,
+      this.step3.date = content.date
     },
     onNextStep() {
       this.isButtonNextStepDisabled= true
@@ -117,7 +125,16 @@ export default {
 
     },
     onFinish() {
-
+      const source= {
+        inputFormat: this.step1.inputFormat,
+        file: this.step2.file,
+        nameCard: this.step2.nameCard,
+        teamLabel: this.step2.teamLabel,
+        triggerType: this.step3.trigger,
+        dateUpdateExpected: this.step3.date
+      }
+      store.dispatch('addSource', source)
+      router.push("/");
     }
   }
 }

@@ -64,9 +64,9 @@ import 'vue2-dropzone/dist/vue2Dropzone.min.css'
         };
         this.$emit('setDataStep2', contentEvent)
         if(this.file !== null && this.nameCard !== "" && this.teamLabel !== "") {
-          this.$emit('setValidStep2', true)
+          this.$emit('setValidStep', true)
         } else {
-          this.$emit('setValidStep2', false)
+          this.$emit('setValidStep', false)
         }
       },
     },

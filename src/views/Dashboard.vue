@@ -9,7 +9,7 @@
         </v-row>
         <v-row>
           <v-col cols="3">
-            <v-select
+            <v-select v-model="filterSelected"
               :items="filters"
               filled
               label="Filtres"
@@ -45,16 +45,37 @@ export default {
   },
   data() {
     return {
+      filterSelected: null,
+      sources: []
     }
   },
   computed: {
-    sources(){ return store.getters.sources },
     filters(){ return store.getters.teamLabels },
+    cSources(){ return store.getters.sources },
+
+  },
+  watch: {
+    filterSelected(newVal) {
+      this.filterSources(newVal)
+    }
   },
   methods: {
     onNewSource() {
       router.push("/nouvelle-source");
+    },
+    filterSources(filter) {
+
+      if(filter === null) return this.cSources
+      let sourcesFinal = []
+      for(const source of this.cSources) {
+        if(source.teamLabel === filter)
+          sourcesFinal.push(source)
+      }
+      this.sources = sourcesFinal
     }
-  }
+  },
+  mounted() {
+      this.sources = store.getters.sources
+    }
 }
 </script>
