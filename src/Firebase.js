@@ -1,17 +1,13 @@
-import * as firebase from 'firebase';
-import firestore from 'firebase/firestore'
+import firebase from "firebase";
 
-const settings = {timestampsInSnapshots: true};
 
 const config = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  databaseURL: "YOUR_DATABASE_URL",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET"
+apiKey: "AIzaSyBjSTMKOh746HsNjGfWUTwJl12fRIhMJA8",
+  authDomain: "niagara-bcc39.firebaseapp.com",
+  projectId: "niagara-bcc39",
+  storageBucket: "niagara-bcc39.appspot.com",
+  messagingSenderId: "227557523687",
+  appId: "1:227557523687:web:703d5aa257c6940418e242"
 };
-firebase.initializeApp(config);
 
-firebase.firestore().settings(settings);
-
-export default firebase;
+export default firebase.initializeApp(config);

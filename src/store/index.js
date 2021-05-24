@@ -18,24 +18,6 @@ sources: [
 export default new Vuex.Store({
   state: {
     sources: [
-      {
-        id: 0,
-        inputFormat: 'Fichier',
-        file: 'txt.txt',
-        nameCard: 'Carte de production des poires',
-        teamLabel: 'production',
-        triggerType: 'Manuel',
-        dateUpdateExpected: '2020-05-07',
-      },
-      {
-        id: 1,
-        inputFormat: 'Fichier',
-        file: 'txt.txt',
-        nameCard: 'Cartedsfdfs',
-        teamLabel: 'production',
-        triggerType: 'Manuel',
-        dateUpdateExpected: '2020-05-07',
-      },
     ],
     teamLabels: ['logistique', 'production', 'qualité', 'maintenance'],
   },
@@ -44,8 +26,12 @@ export default new Vuex.Store({
     sources: (state) => state.sources,
   },
   mutations: {
+    SET_SOURCES(state, sources) {
+      
+      state.sources = sources
+      console.log(state.sources)
+    },
     ADD_SOURCE(state, source) {
-      source.id = state.sources[state.sources.length - 1].id + 1
       state.sources.push(source)
     },
     DELETE_SOURCE(state, idSource) {
@@ -58,6 +44,9 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    setSources({ commit }, payload) {
+      commit('SET_SOURCES', payload)
+    },
     addSource({ commit }, payload) {
       commit('ADD_SOURCE', payload)
     },

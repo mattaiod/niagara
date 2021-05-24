@@ -56,6 +56,8 @@
 </template>
 
 <script>
+import firebase from '../Firebase'
+const db = firebase.firestore();
 import store from '@/store'
 import router from '@/router'
 import Step1 from "@/components/Step1.vue"
@@ -127,12 +129,19 @@ export default {
     onFinish() {
       const source= {
         inputFormat: this.step1.inputFormat,
-        file: this.step2.file,
         nameCard: this.step2.nameCard,
         teamLabel: this.step2.teamLabel,
         triggerType: this.step3.trigger,
         dateUpdateExpected: this.step3.date
       }
+      db.collection("sources")
+        .add(source)
+        .then(() => {
+          console.log("Document successfully written!");
+        })
+        .catch((error) => {
+          console.error("Error writing document: ", error);
+        });
       store.dispatch('addSource', source)
       router.push("/");
     }

@@ -35,9 +35,12 @@
 </template>
 
 <script>
+
 import store from '@/store'
 import router from '@/router'
 import Source from '@/components/Source.vue'
+import firebase from '../Firebase'
+const db = firebase.firestore();
 
 export default {
   name: 'Dashboard',
@@ -47,7 +50,7 @@ export default {
   data() {
     return {
       filterSelected: null,
-      sources: []
+      sources: this.cSources,
     }
   },
   computed: {
@@ -80,15 +83,45 @@ export default {
       this.sources = sourcesFinal
     },
     deleteSource(idSource) {
-      store.dispatch('deleteSource', idSource)
-      this.filterSources()
+      db.collection("sources")
+        .doc(idSource)
+        .delete()
+        .then(() => {
+          console.log("Document successfully deleted!");
+          store.dispatch('deleteSource', idSource)
+          this.filterSources()
+        })
+        .catch((error) => {
+          console.error("Error removing document: ", error);
+        });
     },
     resetFilter() {
       this.filterSelected = null
     }
   },
   mounted() {
-      this.sources = store.getters.sources
-    }
+    let sources = [];
+      db.collection("sources")
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+           sources.push({
+              id: doc.id,
+              dateUpdateExpected: doc.data().dateUpdateExpected,
+              inputFormat: doc.data().inputFormat,
+              nameCard: doc.data().nameCard,
+              teamLabel: doc.data().teamLabel,
+              triggerType: doc.data().triggerType,
+            });
+            console.log(doc.id, " => ", doc.data());
+            store.dispatch('setSources', sources)
+            this.sources = store.getters.sources
+          });
+          
+        })
+        .catch((error) => {
+          console.log("Error getting documents: ", error);
+        });
+  }
 }
 </script>
