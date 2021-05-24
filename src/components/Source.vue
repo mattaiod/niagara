@@ -32,6 +32,9 @@
       this.isKnowMore = !this.isKnowMore
     },
     deleteSource() {
+      const message = "Etes vous sûr de vouloir supprimer cette source ?"
+      const resultat = window.confirm(message);
+      if(resultat == false) return
       this.$emit('deleteSource', this.source.id)
       console.log(this.source.id)
     }
