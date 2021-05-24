@@ -14,6 +14,7 @@
               filled
               label="Filtres"
             ></v-select>
+            <v-btn color="success" @click="resetFilter">X</v-btn>
           </v-col>
         </v-row>
         <v-row>
@@ -24,8 +25,8 @@
       </v-container>
       <v-list v-for="source in sources" :key="source.id">
         <Source
-        :nameCard= "source.nameCard"
-        :teamLabel= "source.teamLabel">
+        :source= "source"
+        @deleteSource="deleteSource($event)">
         </Source>
       </v-list>
       
@@ -50,28 +51,40 @@ export default {
     }
   },
   computed: {
-    filters(){ return store.getters.teamLabels },
+    filters(){ 
+      return store.getters.teamLabels
+    },
     cSources(){ return store.getters.sources },
 
   },
   watch: {
-    filterSelected(newVal) {
-      this.filterSources(newVal)
+    filterSelected() {
+      this.filterSources()
     }
   },
   methods: {
     onNewSource() {
       router.push("/nouvelle-source");
     },
-    filterSources(filter) {
-
-      if(filter === null) return this.cSources
+    filterSources() {
+      const filter = this.filterSelected
+      if(filter === null) {
+        this.sources = this.cSources
+        return 
+      }  
       let sourcesFinal = []
       for(const source of this.cSources) {
         if(source.teamLabel === filter)
           sourcesFinal.push(source)
       }
       this.sources = sourcesFinal
+    },
+    deleteSource(idSource) {
+      store.dispatch('deleteSource', idSource)
+      this.filterSources()
+    },
+    resetFilter() {
+      this.filterSelected = null
     }
   },
   mounted() {
