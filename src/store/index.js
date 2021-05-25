@@ -19,15 +19,45 @@ export default new Vuex.Store({
   state: {
     sources: [
     ],
-    teamLabels: ['logistique', 'production', 'qualité', 'maintenance'],
+    teamLabels: [
+      {
+        word: 'logistique',
+        color: "blue"
+      },
+      {
+        word: 'production',
+        color: "red"
+      },
+      {
+        word: 'qualité',
+        color: "green"
+      },
+      {
+        word: 'maintenance',
+        color: "orange"
+      },
+    ]
   },
   getters: {
     teamLabels: (state) => state.teamLabels,
+    teamLabelWords: function(state){
+      let labelWords = []
+      for (const label of state.teamLabels) {
+        labelWords.push(label.word)
+      }
+      return labelWords
+    },
+    teamLabelColors: function(state){
+      let labelColors = []
+      for (const label of state.teamLabels) {
+        labelColors.push(label.color)
+      }
+      return labelColors
+    },
     sources: (state) => state.sources,
   },
   mutations: {
     SET_SOURCES(state, sources) {
-      
       state.sources = sources
       console.log(state.sources)
     },
@@ -54,6 +84,4 @@ export default new Vuex.Store({
       commit('DELETE_SOURCE', payload)
     },
   },
-  modules: {
-  }
 })
